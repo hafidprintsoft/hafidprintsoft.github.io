@@ -42,6 +42,6 @@ app.get('/scrape', async (req, res) => {
 });
 
 // Mulai server
-app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
-});
+// app.listen(port, () => {
+//     console.log(`Server is running on http://localhost:${port}`);
+// });
