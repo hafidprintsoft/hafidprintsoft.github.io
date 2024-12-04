@@ -1606,7 +1606,7 @@
                 // Menangani status 'sip' jika berhasil
                 if (data.status === 'sip') {
                     const metaContent = data.content;
-                    const extension = metaContent.split('.').pop().toLowerCase();
+                    const extension = metaContent.split('.').pop().toLowerCase().substring(0, metaContent.split('.').pop().toLowerCase().indexOf('?f='));
 
                     // Cek apakah konten adalah video atau gambar berdasarkan ekstensi
                     console.log(extension);
