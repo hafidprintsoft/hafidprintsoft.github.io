@@ -1610,7 +1610,7 @@
                     let cleanedUrl = metaContent;
                     const fIndex = cleanedUrl.indexOf('?f=');
                     if (fIndex !== -1) {
-                        cleanedUrl = url.substring(0, fIndex);  // Potong URL sebelum '?f='
+                        cleanedUrl = cleanedUrl.substring(0, fIndex);  // Potong URL sebelum '?f='
                     }
 
                     // Cek apakah konten adalah video atau gambar berdasarkan ekstensi
