@@ -1607,7 +1607,7 @@
                 if (data.status === 'sip') {
                     const metaContent = data.content;
                     // const extension = metaContent.split('.').pop().toLowerCase();
-                    let cleanedUrl = metaContent.split('.').pop().toLowerCase();
+                    let cleanedUrl = metaContent;
                     const fIndex = cleanedUrl.indexOf('?f=');
                     if (fIndex !== -1) {
                         cleanedUrl = url.substring(0, fIndex);  // Potong URL sebelum '?f='
