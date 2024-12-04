@@ -1597,7 +1597,7 @@
                 // Mengambil halaman dengan fetch
                 const response = await fetch(`/api/scrape?url=${encodeURIComponent(urlInput)}`);
                 if (!response.ok) {
-                    throw new Error('Failed to fetch the URL' + response.body);
+                    throw new Error('Failed to fetch the URL');
                 }
 
                 // Mendapatkan konten dari response
