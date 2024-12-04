@@ -1,11 +1,15 @@
-const express = require('express');
-const axios = require('axios');
-const cheerio = require('cheerio');
-const path = require('path');
-const cors = require('cors');
+import express from 'express';
+import axios from 'axios';
+import * as cheerio from 'cheerio';
+import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// Utilitas untuk mendapatkan direktori saat ini
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
-const port = 3000;
 
 // Middleware untuk static files
 app.use(express.static(path.join(__dirname, 'public')));
@@ -14,7 +18,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 
 // Route untuk scraping
-app.get('/scrape', async (req, res) => {
+app.get('/api/scrape', async (req, res) => {
+    console.log('Scraping request received');
     const url = req.query.url;
 
     // Validasi URL
@@ -22,7 +27,7 @@ app.get('/scrape', async (req, res) => {
         return res.status(400).json({ error: 'URL parameter is required.' });
     }
     try {
-        new URL(url); // Memastikan URL valid
+        new URL(url); 
     } catch (e) {
         return res.status(400).json({ error: 'Invalid URL format.' });
     }
@@ -34,14 +39,17 @@ app.get('/scrape', async (req, res) => {
         // Parsing HTML menggunakan Cheerio
         const $ = cheerio.load(data);
 
+        var typeMeta = 'video';
+
         // Cari meta og:video atau og:image
         let meta = $('meta[property="og:video"]').attr('content');
         if (!meta) {
             meta = $('meta[property="og:image"]').attr('content');
+            typeMeta = 'image';
         }
 
         if (meta) {
-            return res.status(200).json({ content: meta });
+            return res.status(200).json({ status: 'sip', type: typeMeta, content: meta });
         } else {
             return res.status(404).json({ message: 'No og:image or og:video found' });
         }
@@ -56,7 +64,13 @@ app.get('/scrape', async (req, res) => {
     }
 });
 
-// Jalankan server
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
-});
+// Ekspor default untuk mendukung runtime serverless seperti Vercel
+export default app;
+
+// Jalankan server (opsional, untuk pengujian lokal)
+if (process.env.NODE_ENV !== 'production') {
+    // const port = 2001;
+    // app.listen(port, () => {
+    //     console.log(`Server running at http://localhost:${port}`);
+    // });
+}

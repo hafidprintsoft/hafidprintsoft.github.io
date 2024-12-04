@@ -1600,33 +1600,35 @@
                     throw new Error('Failed to fetch the URL');
                 }
 
-                // Mendapatkan konten dari response
-                const body = await response.text();
+                // Mendapatkan data dalam format JSON
+                const data = await response.json();
 
-                // Menggunakan DOMParser untuk parsing HTML
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(body, 'text/html');
+                // Menangani status 'sip' jika berhasil
+                if (data.status === 'sip') {
+                    const metaContent = data.content;
+                    const extension = metaContent.split('.').pop().toLowerCase();
 
-                // Mencari meta tag 'og:video'
-                let meta = doc.querySelector('meta[property="og:video"]');
-                if (meta) {
-                    output.innerHTML = meta.getAttribute('content');
-                    return;
-                }
-
-                // Mencari meta tag 'og:image' jika 'og:video' tidak ada
-                meta = doc.querySelector('meta[property="og:image"]');
-                if (meta) {
-                    output.innerHTML = meta.getAttribute('content');
+                    // Cek apakah konten adalah video atau gambar berdasarkan ekstensi
+                    console.log(extension);
+                    if (['mp4', 'webm', 'ogg', 'mp4?f=webm'].includes(extension)) {
+                        // Jika ekstensi video
+                        output.innerHTML = `<video controls src="${metaContent}" width="500px" autoplay loop></video>`;
+                    } else { //else if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(extension)) 
+                        // Jika ekstensi gambar
+                        output.innerHTML = `<img src="${metaContent}" alt="OG Image" width="500px" />`;
+                    } 
+                    // else {
+                    //     output.innerHTML = 'Invalid file format';
+                    // }
                 } else {
-                    output.innerHTML = 'Meta content not found';
+                    // Jika tidak ditemukan meta tag og:image atau og:video
+                    output.innerHTML = data.message || 'Meta content not found';
                 }
             } catch (error) {
                 console.error('Error:', error);
                 output.innerHTML = 'Error fetching the URL';
             }
         }
-
 
     </script>
 </body>
