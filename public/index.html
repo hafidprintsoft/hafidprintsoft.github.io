@@ -1606,17 +1606,22 @@
                 // Menangani status 'sip' jika berhasil
                 if (data.status === 'sip') {
                     const metaContent = data.content;
-                    const extension = metaContent.split('.').pop().toLowerCase().substring(0, metaContent.split('.').pop().toLowerCase().indexOf('?f='));
+                    // const extension = metaContent.split('.').pop().toLowerCase();
+                    let cleanedUrl = metaContent.split('.').pop().toLowerCase();
+                    const fIndex = extension.indexOf('?f=');
+                    if (fIndex !== -1) {
+                        cleanedUrl = url.substring(0, fIndex);  // Potong URL sebelum '?f='
+                    }
 
                     // Cek apakah konten adalah video atau gambar berdasarkan ekstensi
                     console.log(extension);
-                    if (['mp4', 'webm', 'ogg', 'mp4?f=webm'].includes(extension)) {
+                    if (data.type == 'video') {
                         // Jika ekstensi video
-                        output.innerHTML = `<video controls src="${metaContent}" width="500px" autoplay loop></video>`;
+                        output.innerHTML = `<video controls src="${cleanedUrl}" width="500px" autoplay loop></video>`;
                     } else { //else if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(extension)) 
                         // Jika ekstensi gambar
-                        output.innerHTML = `<img src="${metaContent}" alt="OG Image" width="500px" />`;
-                    } 
+                        output.innerHTML = `<img src="${cleanedUrl}" alt="OG Image" width="500px" />`;
+                    }
                     // else {
                     //     output.innerHTML = 'Invalid file format';
                     // }
