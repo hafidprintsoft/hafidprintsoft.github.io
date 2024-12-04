@@ -1595,7 +1595,7 @@
 
             try {
                 // Mengambil halaman dengan fetch
-                const response = await fetch(`/api/proxy?url=${encodeURIComponent(urlInput)}`);
+                const response = await fetch(`/scrape?url=${encodeURIComponent(urlInput)}`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch the URL');
                 }
