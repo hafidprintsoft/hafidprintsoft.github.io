@@ -1608,13 +1608,13 @@
                     const metaContent = data.content;
                     // const extension = metaContent.split('.').pop().toLowerCase();
                     let cleanedUrl = metaContent.split('.').pop().toLowerCase();
-                    const fIndex = extension.indexOf('?f=');
+                    const fIndex = cleanedUrl.indexOf('?f=');
                     if (fIndex !== -1) {
                         cleanedUrl = url.substring(0, fIndex);  // Potong URL sebelum '?f='
                     }
 
                     // Cek apakah konten adalah video atau gambar berdasarkan ekstensi
-                    console.log(extension);
+                    console.log(cleanedUrl);
                     if (data.type == 'video') {
                         // Jika ekstensi video
                         output.innerHTML = `<video controls src="${cleanedUrl}" width="500px" autoplay loop></video>`;
